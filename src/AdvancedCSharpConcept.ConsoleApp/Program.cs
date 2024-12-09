@@ -1,8 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using AdvancedCSharpConcept.ConsoleApp.EventsDelegates;
 using AdvancedCSharpConcept.ConsoleApp.GenericClass;
 using AdvancedCSharpConcept.ConsoleApp.RecordsAndTupples;
 using AdvancedCSharpConcept.ConsoleApp.StaticClasses;
 using System.Dynamic;
+using System.Reflection;
+using static AdvancedCSharpConcept.ConsoleApp.EventsDelegates.DelegatesSamples;
 using static AdvancedCSharpConcept.ConsoleApp.GenericClass.GenericClassSample;
 using static AdvancedCSharpConcept.ConsoleApp.RecordsAndTupples.RecordsAndTupplesSample;
 
@@ -90,7 +93,6 @@ Console.Out.WriteLine(address.city);
 
 #endregion
 
-
 #region StaticClass
 
 
@@ -128,5 +130,101 @@ money01.ParseToString(); // 500 $
 
 Singleton.Instance.DoWork(); // 1. instance alınır
 Singleton.Instance.DoWork(); // 2. instance alınmadan method direkt olarak tetiklenecektir.
+
+#endregion
+
+
+#region DelegateSamples
+
+var emailSender = new SendEmail();
+// emailSender.ShowMessage("Bildirim");
+var smsSender = new SendSms();
+// smsSender.ShowMessage("Bildirim");
+
+// Multi cast delegate, birden fazla methodun delegate üzerinden sıralı bir şekilde çağırılması
+MessageHandler messageHandler = emailSender.ShowMessage;
+messageHandler += smsSender.ShowMessage;
+
+// 2.yöntem
+MessageHandler messageHandler2 = new(emailSender.ShowMessage);
+messageHandler2 += smsSender.ShowMessage;
+
+// delegate üzerinden method tetikleme yöntemi
+messageHandler.Invoke("Bildirim");
+
+
+// 2. kullanım şekli
+
+DelegatesSamples dg = new();
+
+OperationHandler sh = dg.OnSuccess;
+sh += dg.OnError;
+
+
+DelegateInvoker di = new();
+di.Invoke("", sh); // onError
+di.Invoke("success", sh); // onSuccess, Javascript Callback yaklaşımının C# versiyonu
+
+
+// Action Delegate Func Delegate 
+// Func Delegate değer döndüren delegate
+// Action void tanımlı doışarıdan parametre alan delegate
+
+Action<string> ShowMessageAction = message =>
+{
+  Console.Out.WriteLine(message);
+};
+
+
+di.Handle(ShowMessageAction);
+
+
+Func<int, int, int> Toplama = (int sayi1, int sayi2) =>
+{
+  return sayi1 + sayi2;
+};
+
+
+List<int> numbers05 = [1, 2, 3, 4];
+List<int> numbers06 = [10, 20, 30, 40];
+
+
+int totalSum = 0;
+
+numbers05.ForEach((item) =>
+{
+  numbers06.ForEach((item2) =>
+  {
+    totalSum += Toplama(item, item2);
+  });
+});
+
+Console.Out.WriteLine("Toplam" + totalSum);
+
+// Son olarak Dynamic Delegate Runtime da Reflection üzerinde bir sınıfa ait methodu bulup ön tanımlı bir delegate üzerinden methodunun run edilmesini sağlar. Plugin bazlı geliştirilen uygulamalarda benzer yöntemeler uygulanabilir.
+// 
+
+var sendEmailInstance = Activator.CreateInstance<SendEmail>();
+MethodInfo methodInfo = typeof(SendEmail).GetMethod("ShowMessage");
+
+// MessageHandler delegate üzerinden methodInfo ait değeri tetikleme için bir delegate create ettik
+Delegate dynamicDelegate = Delegate.CreateDelegate(typeof(MessageHandler), sendEmailInstance, methodInfo);
+
+dynamicDelegate.DynamicInvoke("Dynamic Mesaj");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #endregion
