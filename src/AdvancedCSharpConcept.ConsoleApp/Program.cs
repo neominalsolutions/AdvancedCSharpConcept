@@ -4,6 +4,7 @@ using AdvancedCSharpConcept.ConsoleApp.RecordsAndTupples;
 using AdvancedCSharpConcept.ConsoleApp.StaticClasses;
 using System.Dynamic;
 using static AdvancedCSharpConcept.ConsoleApp.GenericClass.GenericClassSample;
+using static AdvancedCSharpConcept.ConsoleApp.RecordsAndTupples.RecordsAndTupplesSample;
 
 Console.WriteLine("Hello, World!");
 
@@ -98,6 +99,27 @@ StaticClassSamples.FormatDate(DateTime.Today);
 // Global Variables
 StaticClassSamples.GuestCount++;
 StaticClassSamples.GuestCount = 0;
+
+
+string Name = "ali";
+
+string NameLower = Name.ToLowerCase();
+
+char[] chars =  Name.ToArray();
+
+var money01 = new Money(500,"$");
+money01.ParseToString(); // 500 $
+
+
+
+//var l = Name.ToCharArray().Sum((Func<char, decimal> func) =>
+//{
+//  Console.WriteLine(ch);
+//  Console.WriteLine(dc);
+
+//  return func;
+//});
+
 
 //StaticClassSamples.Id = 789;
 
