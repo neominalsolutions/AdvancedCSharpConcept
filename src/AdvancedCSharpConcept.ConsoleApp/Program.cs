@@ -214,15 +214,19 @@ dynamicDelegate.DynamicInvoke("Dynamic Mesaj");
 
 
 
+#endregion
 
 
+#region EventSamples
 
+EventSamples es = new();
+es.PostSave += Es_PostSave; // MultiCasting
+es.Save();
 
-
-
-
-
-
+void Es_PostSave(object? sender, PostSaveArgs e)
+{
+  Console.WriteLine("Tetiklendi");
+}
 
 
 
