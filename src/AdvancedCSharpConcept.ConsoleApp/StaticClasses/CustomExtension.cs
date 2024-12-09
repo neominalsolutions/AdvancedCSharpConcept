@@ -24,5 +24,12 @@ namespace AdvancedCSharpConcept.ConsoleApp.StaticClasses
       return $"{value.Amount} {value.Currency}";
     }
 
+
+    public static string PrettyFormatDate(this DateTime value)
+    {
+      return $"{value.Day}/{value.Month}/{value.Year}";
+    }
+
+
   }
 }

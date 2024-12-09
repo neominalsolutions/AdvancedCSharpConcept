@@ -94,7 +94,9 @@ Console.Out.WriteLine(address.city);
 #region StaticClass
 
 
-StaticClassSamples.FormatDate(DateTime.Today);
+StaticClassSamples.FormatDate(DateTime.Today); // Static Class ile Utility
+
+DateTime.Today.PrettyFormatDate(); // Extension Method hali
 
 // Global Variables
 StaticClassSamples.GuestCount++;
